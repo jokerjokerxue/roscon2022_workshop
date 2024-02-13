@@ -77,7 +77,7 @@ std::vector<hardware_interface::StateInterface> RRBotHardwareInterface::export_s
   for (const auto & state_itf : info_.gpios[0].state_interfaces)
   {
     state_interfaces.emplace_back(
-      hardware_interface::StateInterface(info_.gpios[0].name, state_itf.name, &sensor_states_[i]));
+      hardware_interface::StateInterface(info_.gpios[0].name, state_itf.name, &gpio_states_[i]));
     ++i;
   }
 
@@ -85,7 +85,7 @@ std::vector<hardware_interface::StateInterface> RRBotHardwareInterface::export_s
   for (const auto & state_itf : info_.sensors[0].state_interfaces)
   {
     state_interfaces.emplace_back(
-      hardware_interface::StateInterface(info_.sensors[0].name, state_itf.name, &gpio_states_[i]));
+      hardware_interface::StateInterface(info_.sensors[0].name, state_itf.name, &sensor_states_[i]));
     ++i;
   }
 

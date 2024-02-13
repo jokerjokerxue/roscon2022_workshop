@@ -40,6 +40,7 @@ hardware_interface::CallbackReturn RRBotHardwareInterface::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // TODO(anyone): prepare the robot to be ready for read calls and write calls of some interfaces
+  joint_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   return CallbackReturn::SUCCESS;
 }
@@ -49,9 +50,10 @@ std::vector<hardware_interface::StateInterface> RRBotHardwareInterface::export_s
   std::vector<hardware_interface::StateInterface> state_interfaces;
   for (size_t i = 0; i < info_.joints.size(); ++i)
   {
+    hw_states_[i]=stod(info_.joints[i].states_interfaces[0].initial_value);
     state_interfaces.emplace_back(hardware_interface::StateInterface(
       // TODO(anyone): insert correct interfaces
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
+      info_.joints[i].name, info_.joints[i].state_interfaces[0].name, &hw_states_[i]));
   }
 
   return state_interfaces;
@@ -74,6 +76,8 @@ hardware_interface::CallbackReturn RRBotHardwareInterface::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // TODO(anyone): prepare the robot to receive commands
+  hw_commands_=hw_states_;
+  joint_states_=hw_states_;
 
   return CallbackReturn::SUCCESS;
 }
@@ -90,6 +94,10 @@ hardware_interface::return_type RRBotHardwareInterface::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // TODO(anyone): read robot states
+  hw_states_ = joint_states_;
+
+  printf("OK!");
+  for()
 
   return hardware_interface::return_type::OK;
 }
